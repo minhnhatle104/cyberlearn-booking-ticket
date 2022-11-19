@@ -1,37 +1,44 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import axios from 'axios'
 import { Carousel } from 'antd';
+import { useSelector, useDispatch } from "react-redux"
+import {getCarouselAction} from "../../../../redux/actions/CarouselActions"
 
 const contentStyle = {
-    height: '400px',
+    height: '600px',
     color: '#fff',
     lineHeight: '160px',
     textAlign: 'center',
-    background: '#364d79',
+    backgroundPosition: "center",
+    backgroundSize: "100%",
+    backgroundRepeat: "no-repeat"
 };
 
 export default function HomeCarousel() {
+    const { arrImg } = useSelector(state => state.CarouselReducer)
+
+    const dispatch = useDispatch()
+
+    // Sẽ tự kích hoạt khi component load ra
+    useEffect(() => {
+
+        // 1 action: {type:"",data}
+        // 2 (phải cài middleware) : callBackFunction (dispatch)
+        dispatch(getCarouselAction())
+    }, [])
+
+    const renderImg = () => {
+        return arrImg.map((item, index) => {
+            return <div key={index}>
+                <div style={{ ...contentStyle, backgroundImage: `url(${item.hinhAnh})` }}>
+                    <img src={item.hinhAnh} className='w-full opacity-0' alt={item.hinhAnh} />
+                </div>
+            </div>
+        })
+    }
     return (
         <Carousel effect="fade">
-            <div>
-                <div style={contentStyle}>
-                    <img src='https://picsum.photos/500' className='w-full' alt='123' />
-                </div>
-            </div>
-            <div>
-                <div style={contentStyle}>
-                    <img src='https://picsum.photos/500' className='w-full' alt='123' />
-                </div>
-            </div>
-            <div>
-                <div style={contentStyle}>
-                    <img src='https://picsum.photos/500' className='w-full' alt='123' />
-                </div>
-            </div>
-            <div>
-                <div style={contentStyle}>
-                    <img src='https://picsum.photos/500' className='w-full' alt='123' />
-                </div>
-            </div>
+            {renderImg()}
         </Carousel>
     )
 }

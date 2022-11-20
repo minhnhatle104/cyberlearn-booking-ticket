@@ -1,6 +1,12 @@
+import _ from 'lodash'
 import React from 'react'
+import { useSelector } from 'react-redux'
 
 export default function Footer(props) {
+    const { heThongRapChieu } = useSelector(state => state.QuanLyRapReducer)
+
+    const arrHeThongRap = _.map(heThongRapChieu, (heThongRap) => _.pick(heThongRap, ['maHeThongRap', 'tenHeThongRap', 'logo']))
+
     return (
         <footer className="py-6 bg-gray-100 ">
             <div className="container px-6 mx-auto space-y-6 divide-y divide-gray-400 md:space-y-12 divide-opacity-50">
@@ -17,23 +23,13 @@ export default function Footer(props) {
                     </div>
                     <div className="col-span-6 text-center md:text-left md:col-span-3">
                         <p className="pb-1 text-lg font-medium">Category</p>
-                        <ul>
-                            <li>
-                                <a rel="noopener noreferrer" href="#" className="hover:text-violet-600">Link</a>
-                            </li>
-                            <li>
-                                <a rel="noopener noreferrer" href="#" className="hover:text-violet-600">Link</a>
-                            </li>
-                            <li>
-                                <a rel="noopener noreferrer" href="#" className="hover:text-violet-600">Link</a>
-                            </li>
-                            <li>
-                                <a rel="noopener noreferrer" href="#" className="hover:text-violet-600">Link</a>
-                            </li>
-                            <li>
-                                <a rel="noopener noreferrer" href="#" className="hover:text-violet-600">Link</a>
-                            </li>
-                        </ul>
+                        <div className='grid grid-cols-3' style={{ color: '#fff' }}>
+                            {arrHeThongRap.map((htr, index) => {
+                                return <li key={index}>
+                                    <img src={htr.logo} style={{ width: 50 }} />
+                                </li>
+                            })}
+                        </div>
                     </div>
                     <div className="col-span-6 text-center md:text-left md:col-span-3">
                         <p className="pb-1 text-lg font-medium">Category</p>

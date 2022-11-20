@@ -5,16 +5,19 @@ import { useSelector, useDispatch } from 'react-redux'
 import Film from '../../components/Film/Film';
 import MultipleRowSlick from '../../components/RSlick/MultipleRowSlick'
 import { LayDanhSachPhimAction } from '../../redux/actions/QuanLyPhimActions';
+import { layDanhSachHeThongRapAction } from '../../redux/actions/QuanLyRapAction';
 
 export default function Home(props) {
 
     const { arrFilm } = useSelector(state => state.QuanLyPhimReducer);
+    const {heThongRapChieu} = useSelector(state => state.QuanLyRapReducer)
     console.log('propsHome', props);
 
 	const dispatch = useDispatch()
    
 	useEffect(()=>{
 		dispatch(LayDanhSachPhimAction())
+        dispatch(layDanhSachHeThongRapAction())
 	},[])
 
     return (
@@ -30,7 +33,7 @@ export default function Home(props) {
             </section>
 
             <div className="mx-36">
-                <HomeMenu />
+                <HomeMenu heThongRapChieu={heThongRapChieu}/>
 
             </div>
         </div>

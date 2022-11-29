@@ -1,10 +1,11 @@
 import React, { Fragment } from 'react';
-import { Tabs } from 'antd';
+import { Tabs, Radio, Space } from 'antd';
+import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import moment from 'moment';
 const { TabPane } = Tabs;
 
-export default class HomeMenu extends React.PureComponent {
+export default class Demo extends React.PureComponent {
 
 
     state = {
@@ -46,7 +47,7 @@ export default class HomeMenu extends React.PureComponent {
                                                 <p>{cumRap.diaChi}</p>
                                                 <div className="grid grid-cols-6 gap-6">
                                                     {phim.lstLichChieuTheoPhim?.slice(0, 12).map((lichChieu, index) => {
-                                                        return <NavLink className="text-2xl text-green-400" to="/" key={index}>
+                                                        return <NavLink className="text-2xl text-green-400" to={`/checkout/${lichChieu.maLichChieu}`} key={index}>
                                                             {moment(lichChieu.ngayChieuGioChieu).format('hh:mm A')}
                                                         </NavLink>
                                                     })}
@@ -83,3 +84,4 @@ export default class HomeMenu extends React.PureComponent {
         );
     }
 }
+

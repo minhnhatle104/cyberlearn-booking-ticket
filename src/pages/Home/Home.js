@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import HomeMenu from './HomeMenu/HomeMenu'
 //Kết nối redux
 import { useSelector, useDispatch } from 'react-redux'
-import Film from '../../components/Film/Film';
 import MultipleRowSlick from '../../components/RSlick/MultipleRowSlick'
-import { LayDanhSachPhimAction } from '../../redux/actions/QuanLyPhimActions';
+import { layDanhSachPhimAction } from '../../redux/actions/QuanLyPhimActions';
 import { layDanhSachHeThongRapAction } from '../../redux/actions/QuanLyRapAction';
 import HomeCarousel from '../../templates/HomeTemplate/Layout/HomeCarousel/HomeCarousel';
 
@@ -17,7 +16,7 @@ export default function Home(props) {
 	const dispatch = useDispatch()
    
 	useEffect(()=>{
-		dispatch(LayDanhSachPhimAction())
+		dispatch(layDanhSachPhimAction())
         dispatch(layDanhSachHeThongRapAction())
 	},[])
 

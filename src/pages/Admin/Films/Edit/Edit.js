@@ -2,15 +2,20 @@ import React, { useEffect, useState } from 'react';
 import {
   Form,
   Input,
+  Button,
   Radio,
+  Select,
+  Cascader,
   DatePicker,
   InputNumber,
+  TreeSelect,
   Switch,
 } from 'antd';
 import { useFormik } from 'formik';
 import moment from 'moment';
+import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { layThongTinPhimAction, themPhimUploadHinhAction } from '../../../../redux/actions/QuanLyPhimActions';
+import { capNhatPhimUploadAction, layThongTinPhimAction, themPhimUploadHinhAction } from '../../../../redux/actions/QuanLyPhimActions';
 import { GROUPID } from '../../../../util/settings/config';
 
 const Edit = (props) => {
@@ -20,8 +25,6 @@ const Edit = (props) => {
   console.log('thongTinPhim', thongTinPhim);
   const [imgSrc, setImgSrc] = useState('');
   const dispatch = useDispatch();
-
-  
 
   useEffect(() => {
     let { id } = props.match.params;
@@ -35,6 +38,7 @@ const Edit = (props) => {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
+      maPhim: thongTinPhim.maPhim,
       dangChieu: thongTinPhim.dangChieu,
       sapChieu: thongTinPhim.sapChieu,
       hot: thongTinPhim.hot,
@@ -56,24 +60,26 @@ const Edit = (props) => {
         if (key !== 'hinhAnh') {
           formData.append(key, values[key]);
         } else {
-          formData.append('File', values.hinhAnh, values.hinhAnh.name);
+          if (values.hinhAnh !== null) {
+            formData.append('File', values.hinhAnh, values.hinhAnh.name);
+
+          }
         }
       }
-      //Gọi api gửi các giá trị formdata về backend xử lý
-      dispatch(themPhimUploadHinhAction(formData));
+      //Cập nhật phim upload hình
+      dispatch(capNhatPhimUploadAction(formData));
 
     }
   })
 
   const handleChangeDatePicker = (value) => {
     // console.log('datepickerchange',);
-    let ngayKhoiChieu = moment(value).format('DD/MM/YYYY');
+    let ngayKhoiChieu = moment(value);
     formik.setFieldValue('ngayKhoiChieu', ngayKhoiChieu);
 
   }
 
   const handleChangeSwitch = (name) => {
-
     return (value) => {
       formik.setFieldValue(name, value)
     }
@@ -85,20 +91,20 @@ const Edit = (props) => {
     }
   }
 
-  const handleChangeFile = (e) => {
+  const handleChangeFile = async (e) => {
     //Lấy file ra từ e
     let file = e.target.files[0];
     if (file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/gif' || file.type === 'image/png') {
+      //Đem dữ liệu file lưu vào formik
+      await formik.setFieldValue('hinhAnh', file);
       //Tạo đối tượng để đọc file
       let reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = (e) => {
         // console.log(e.target.result);
         setImgSrc(e.target.result);//Hình base 64
-
       }
-      //Đem dữ liệu file lưu vào formik
-      formik.setFieldValue('hinhAnh', file);
+
     }
   }
 
@@ -167,7 +173,7 @@ const Edit = (props) => {
           <img width={100} height={100} src={imgSrc === '' ? thongTinPhim.hinhAnh : imgSrc} />
         </Form.Item>
         <Form.Item label="Button">
-          <button type="submit" className="bg-blue-300 text-white p-2">Thêm phim</button>
+          <button type="submit" className="bg-blue-300 text-white p-2">Cập nhật</button>
 
         </Form.Item>
       </Form>
